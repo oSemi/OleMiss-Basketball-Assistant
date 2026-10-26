@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ole Miss Basketball Manager Checklist</title>
+<style>
+:root{--navy:#14213d;--red:#b32635;--paper:#fff;--bg:#f3f4f6;--ink:#202534;--muted:#687083;--line:#e1e4e9;--green:#19734a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:var(--navy);color:#fff;padding:26px max(18px,calc((100% - 1180px)/2));border-bottom:5px solid var(--red)}
+.kicker{font-size:12px;letter-spacing:.16em;font-weight:800;color:#c4d0e5;text-transform:uppercase}
+h1{font-size:clamp(27px,4vw,42px);line-height:1.08;margin:8px 0}header p{margin:8px 0 0;color:#d9dfeb}
+main{max-width:1180px;margin:22px auto;padding:0 16px 42px}
+.notice{background:#fff7e6;border:1px solid #f0d6a0;border-left:5px solid #bb8425;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:13px}
+.layout{display:grid;grid-template-columns:265px minmax(0,1fr);gap:18px;align-items:start}
+aside,.panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 8px #17203308}
+aside{padding:14px;position:sticky;top:12px}
+aside h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;margin:4px 8px 10px;color:var(--muted)}
+.navbtn{display:block;width:100%;text-align:left;border:0;background:transparent;padding:10px 9px;border-radius:8px;color:var(--ink);cursor:pointer;font:inherit}
+.navbtn:hover,.navbtn.active{background:#f9e9eb;color:#7c1722;font-weight:700}
+.small{font-size:12px;color:var(--muted)}
+main h2{margin:0 0 12px;font-size:21px}
+.panel{padding:18px;margin-bottom:16px}
+.topgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px}
+.stat strong{display:block;font-size:24px}.stat span{font-size:12px;color:var(--muted)}
+.progress{height:8px;background:#e8ebef;border-radius:20px;overflow:hidden;margin:10px 0 4px}.progress div{height:100%;background:var(--green);width:0;transition:width .2s}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+input,select,textarea{font:inherit;border:1px solid #cfd4dc;border-radius:8px;padding:9px;background:#fff;color:var(--ink);max-width:100%}
+button.action{border:1px solid #cfd4dc;background:#fff;border-radius:8px;padding:9px 12px;cursor:pointer;font-weight:650;color:var(--ink)}
+button.primary{background:var(--red);color:#fff;border-color:var(--red)}button.action:hover{filter:brightness(.97)}
+.section{border:1px solid var(--line);border-radius:11px;margin:12px 0;overflow:hidden}
+.section-head{padding:12px 14px;background:#f6f7f9;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.section-head h3{margin:0;font-size:15px}.section-head small{color:var(--muted)}
+.task{display:flex;gap:10px;align-items:flex-start;padding:11px 14px;border-top:1px solid #edf0f3}
+.task input[type=checkbox]{margin-top:4px;accent-color:var(--green);width:17px;height:17px;flex:0 0 auto}
+.task label{flex:1;cursor:pointer}.task.done label{text-decoration:line-through;color:#798091}
+.task-meta{display:block;font-size:11px;color:var(--muted);margin-top:3px}
+.task-assignee{width:205px;flex:0 0 205px;font-size:12px;padding:7px}
+@media(max-width:650px){.task{flex-wrap:wrap}.task label{min-width:calc(100% - 40px)}.task-assignee{margin-left:27px;width:calc(100% - 27px);flex:1 1 calc(100% - 27px)}}
+
+.pill{display:inline-block;border-radius:99px;padding:3px 8px;font-size:11px;font-weight:700;background:#edf0f5;color:#4c5669}
+.pill.warn{background:#fff0d8;color:#86570c}.pill.red{background:#fbe8ea;color:#8e1e2a}
+label.field{display:block;font-size:12px;font-weight:750;color:var(--muted);margin:8px 0 4px}
+.fieldgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.empty{padding:22px;color:var(--muted);text-align:center}
+.schedule-table{width:100%;border-collapse:collapse;font-size:13px}
+.schedule-table th,.schedule-table td{padding:9px 7px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+.schedule-table th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:#f7f8fa}
+.schedule-table tr:last-child td{border-bottom:0}
+.schedule-table .venue{white-space:nowrap;color:var(--muted)}
+.schedule-table .usegame{padding:5px 8px;font-size:11px;white-space:nowrap}
+.schedule-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.schedule-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin:12px 0}
+.schedule-toolbar>div{flex:1;min-width:180px}
+.schedule-toolbar select{width:100%}
+@media(max-width:650px){.schedule-table{min-width:700px}}
+
+footer{color:var(--muted);font-size:12px;text-align:center;padding:18px}
+@media(max-width:780px){.layout{grid-template-columns:1fr}aside{position:static}.navlist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px}.topgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.fieldgrid{grid-template-columns:1fr}}
+@media print{body{background:#fff}header{padding:16px;background:#fff;color:#111;border-bottom:3px solid #111}header p,.kicker{color:#333}main{max-width:none;margin:0;padding:8px}.layout{display:block}aside,.controls,.notice,.topgrid,.no-print,footer{display:none!important}.panel{box-shadow:none;border:0;padding:0}.section{break-inside:avoid}.section-head{background:#eee}.task{padding:6px 10px}}
+
+.assistant-panel{border:1px solid var(--line);border-radius:14px;background:#fff;margin:16px 0;overflow:hidden}
+.assistant-head{background:var(--navy);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px}
+.assistant-head h2{margin:0;font-size:18px}.assistant-head p{margin:2px 0 0;font-size:12px;color:#d9dfeb}
+.assistant-body{padding:14px}.chat-log{display:flex;flex-direction:column;gap:10px;max-height:360px;overflow:auto;margin-bottom:12px}
+.chat-msg{padding:10px 12px;border-radius:12px;max-width:92%;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}
+.chat-msg.user{align-self:flex-end;background:#f9e9eb}.chat-msg.bot{align-self:flex-start;background:#f3f5f8}
+.chat-form{display:flex;gap:8px}.chat-form input{flex:1;min-width:0}.chat-status{font-size:12px;color:var(--muted);margin-top:8px}
+.sync-pill{display:inline-block;border-radius:99px;background:#e8f4ec;color:#17663b;padding:3px 8px;font-size:11px;font-weight:700}
+@media(max-width:650px){.chat-form{flex-direction:column}.chat-form button{width:100%}}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="kicker">Ole Miss Men's Basketball · 2026–27</div>
+  <h1>Manager Master Checklist</h1>
+  <p>A working checklist for packing, practice, game preparation, game day and close-out.</p>
+</header>
+<main>
+  <div class="notice"><strong>Use the official itinerary.</strong> The manual says the Director of Operations' itinerary is the master clock and overrides times in this checklist. This app is a helper, not an official team system. Keep scouting reports, play cards, injury information and other confidential material out of notes here. Do not post practice details, photos or plans publicly.</div>
+  <div class="panel" id="seasonSchedule">
+    <h2>2026–27 Game Schedule</h2>
+    <p class="small">Schedule transcribed from the supplied screenshot. Choose a game to fill in the checklist event and tipoff time. The official Operations itinerary remains the source of truth if details change.</p>
+    <div class="schedule-toolbar">
+      <div><label class="field" for="gamePicker">Select a game</label><select id="gamePicker"><option value="">Choose opponent…</option></select></div>
+      <div><button class="action primary" id="useGameBtn">Use selected game</button> <button class="action" id="clearGameBtn">Clear selection</button></div>
+    </div>
+    <div class="schedule-wrap"><table class="schedule-table">
+      <thead><tr><th>Date</th><th>Opponent</th><th>Location</th><th>Tipoff</th><th>TV</th><th></th></tr></thead>
+      <tbody id="scheduleRows"></tbody>
+    </table></div>
+    <p class="small">* Neutral-site game. Times are shown as listed in the supplied image. Broadcast entries are left blank where the screenshot showed no network.</p>
+  </div>
+  <div class="topgrid">
+    <div class="stat"><strong id="totalCount">0</strong><span>Tasks in this view</span></div>
+    <div class="stat"><strong id="doneCount">0</strong><span>Completed</span></div>
+    <div class="stat"><strong id="remainingCount">0</strong><span>Remaining</span></div>
+    <div class="stat"><strong id="percentCount">0%</strong><span>Progress</span></div>
+  </div>
+  <div class="progress"><div id="progressBar"></div></div>
+  <div class="layout">
+    <aside>
+      <h2>Checklist sections</h2>
+      <div id="nav" class="navlist"></div>
+      <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+      <div class="small">Progress is saved in this browser on this device. It is not shared with other managers.</div>
+      <div class="controls">
+        <button class="action" id="exportBtn">Export progress</button>
+        <button class="action" id="importBtn">Import progress</button>
+        <input id="importFile" type="file" accept="application/json" hidden>
+        <button class="action" id="printBtn">Print checklist</button>
+        <button class="action" id="resetBtn">Reset section</button>
+      </div>
+    </aside>
+    <div>
+      <div class="panel">
+        <h2 id="viewTitle">Today’s checklist</h2>
+        <div class="fieldgrid">
+          <div><label class="field" for="eventName">Event / opponent (optional)</label><input id="eventName" placeholder="e.g. Home game"></div>
+          <div><label class="field" for="tipTime">Tipoff time (optional)</label><input id="tipTime" type="datetime-local"></div>
+          <div><label class="field" for="managerName">Manager / crew (optional)</label><input id="managerName" placeholder="Name or crew"></div>
+        </div>
+        <div class="controls">
+          <input id="search" placeholder="Search tasks…" aria-label="Search tasks">
+          <select id="statusFilter" aria-label="Filter by status"><option value="all">All tasks</option><option value="open">Incomplete only</option><option value="done">Completed only</option></select>
+          <button class="action" id="showAllBtn">Show all sections</button>
+        </div>
+        <div class="small" id="viewHelp">Choose a section from the left, or show all sections.</div>
+      </div>
+      <div id="taskList"></div>
+      <div class="panel" id="signoff">
+        <h2>Completion sign-off</h2>
+        <div class="fieldgrid">
+          <div><label class="field" for="completedBy">Completed by</label><input id="completedBy" placeholder="Name"></div>
+          <div><label class="field" for="verifiedBy">Verified by</label><input id="verifiedBy" placeholder="Name"></div>
+          <div><label class="field" for="notes">Non-confidential issue / follow-up</label><input id="notes" placeholder="Report issues through the proper chain"></div>
+        </div>
+        <p class="small">Record missing or damaged equipment and report it to Operations in writing. Do not enter confidential scouting, player health, or strategy details.</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="assistant-panel" id="managerAssistant">
+    <div class="assistant-head">
+      <div style="font-size:24px">💬</div>
+      <div><h2>Ole Miss Manager Assistant</h2><p>Ask about checklist progress, assignments, and upcoming games</p></div>
+    </div>
+    <div class="assistant-body">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+        <span class="sync-pill" id="syncStatus">Connecting to shared checklist…</span>
+        <button class="action" id="changeAccessBtn" type="button">Team access</button>
+      </div>
+      <div class="chat-log" id="chatLog" aria-live="polite">
+        <div class="chat-msg bot">Hi! I can check recorded task completion, manager assignments, and the schedule. I’ll tell you when information is missing instead of guessing.</div>
+      </div>
+      <form class="chat-form" id="chatForm">
+        <input id="chatQuestion" maxlength="1000" placeholder="e.g. What is still unfinished for the next game?" autocomplete="off" required>
+        <button class="action primary" id="chatSend" type="submit">Ask assistant</button>
+      </form>
+      <p class="chat-status" id="chatStatus">This assistant uses the shared checklist. Do not enter scouting reports, injury details, play cards, or other confidential team information.</p>
+    </div>
+  </section>
+
+  <footer>Built from the uploaded checklist photos. Pages or text that could not be read are flagged rather than filled in by guesswork.</footer>
+</main>
+<script>
+const games = [
+["2026-11-02","Mon, Nov 2","Alcorn State","Home","7:30 PM","SEC Network+"],
+["2026-11-06","Fri, Nov 6","Central Arkansas","Home","7:30 PM","SEC Network+"],
+["2026-11-10","Tue, Nov 10","SE Louisiana","Home","7:30 PM","SEC Network+"],
+["2026-11-17","Tue, Nov 17","Nicholls","Home","7:30 PM",""],
+["2026-11-23","Mon, Nov 23","Clemson","Neutral*","1:30 PM","ESPN2"],
+["2026-12-01","Tue, Dec 1","Virginia Tech","Away","8:00 PM","ACCN"],
+["2026-12-07","Mon, Dec 7","William & Mary","Home","7:00 PM","SEC Network+"],
+["2026-12-12","Sat, Dec 12","UL Monroe","Neutral*","1:00 PM",""],
+["2026-12-15","Tue, Dec 15","Youngstown State","Home","6:00 PM",""],
+["2026-12-19","Sat, Dec 19","NC State","Neutral*","6:00 PM","ESPN U"],
+["2026-12-22","Tue, Dec 22","Southern Miss","Neutral*","3:00 PM",""],
+["2026-12-28","Mon, Dec 28","Jackson State","Home","6:00 PM",""],
+["2027-01-02","Sat, Jan 2","Georgia","Home","12:00 PM","SEC Network+"],
+["2027-01-05","Tue, Jan 5","#23 Kentucky","Away","6:00 PM","SEC Network+"],
+["2027-01-09","Sat, Jan 9","#7 Texas","Away","11:00 AM","ESPN U"],
+["2027-01-13","Wed, Jan 13","#20 Alabama","Away","8:00 PM","SEC Network+"],
+["2027-01-16","Sat, Jan 16","Auburn","Away","7:30 PM","SEC Network+"],
+["2027-01-23","Sat, Jan 23","Texas A&M","Home","5:00 PM","SEC Network+"],
+["2027-01-27","Wed, Jan 27","#24 Vanderbilt","Home","8:00 PM","SEC Network+"],
+["2027-01-30","Sat, Jan 30","Missouri","Away","5:00 PM","SEC Network+"],
+["2027-02-02","Tue, Feb 2","#23 Kentucky","Home","8:00 PM","SEC Network+"],
+["2027-02-06","Sat, Feb 6","LSU","Away","3:00 PM","ESPN2"],
+["2027-02-09","Tue, Feb 9","#12 Arkansas","Away","8:00 PM","SEC Network+"],
+["2027-02-13","Sat, Feb 13","Mississippi State","Home","7:30 PM","SEC Network+"],
+["2027-02-17","Wed, Feb 17","#8 Tennessee","Home","6:00 PM","SEC Network+"],
+["2027-02-20","Sat, Feb 20","South Carolina","Away","2:30 PM","SEC Network+"],
+["2027-02-24","Wed, Feb 24","#1 Florida","Away","8:00 PM","SEC Network+"],
+["2027-02-27","Sat, Feb 27","Oklahoma","Home","2:30 PM","SEC Network+"],
+["2027-03-02","Tue, Mar 2","Auburn","Home","9:00 PM","SEC Network+"],
+["2027-03-06","Sat, Mar 6","Mississippi State","Away","3:00 PM","SEC Network+"]
+];
+const sections = [
+{id:"packing",title:"01 · Packing procedure & expectations",subtitle:"Road trips, neutral sites and tournaments",tasks:[
+["72–48 hours out · Confirm the trip","Get the final itinerary and trunk list from the Director of Operations."],
+["72–48 hours out · Confirm the trip","Confirm uniform color."],
+["72–48 hours out · Confirm the trip","Contact host manager: confirm game-ball model, shootaround time, towels, water/sports drink, ice, laundry service."],
+["72–48 hours out · Confirm the trip","Confirm travel mode (bus/charter) and when the deadhead bus is leaving."],
+["72–48 hours out · Confirm the trip","Pull inventory sheet; flag shortages to Operations no later than 24 hours before departure."],
+["Uniforms & apparel","Game jerseys and shorts for every roster player. Count by number and lay out before packing."],
+["Uniforms & apparel","Backup uniform set and spare jersey/shorts in unassigned numbers."],
+["Uniforms & apparel","Warm-up tops, warm-up pants and shooting shirts."],
+["Uniforms & apparel","Practice gear and reversibles for shootaround/practice."],
+["Uniforms & apparel","Socks, compression and sleeves. Extra stock in every size."],
+["Uniforms & apparel","Staff game-day attire per Operations direction."],
+["Basketballs","Confirm game-ball model with host; pack 3 broken-in game balls."],
+["Basketballs","Pack 12–15 practice balls in ball bags; count and record number on inventory sheet."],
+["Basketballs","Pack ball pump, spare needles and pressure gauge."],
+["Basketballs","Pack portable basketball goal."],
+["Coaching & bench supplies","Pack two large whiteboards, bench clipboards and dry-erase boards."],
+["Coaching & bench supplies","Pack black, blue and red dry-erase markers, erasers and whiteboard spray."],
+["Coaching & bench supplies","Pack stat/charting sheets, pens, pencils and stopwatches."],
+["Coaching & bench supplies","Pack bench towels, one per seat plus 10 extra."],
+["Hydration & fuel","Coordinate with sports dietitian; pack drinks, recovery shakes and snacks per dietitian's list."],
+["Hydration & fuel","Pack squeeze bottles, carriers, cups and coolers."],
+["Hydration & fuel","Confirm what the host is providing so nothing is double-packed or missed."],
+["Video / tech","Load trunks only; video staff packs its own gear and signs off."],
+["Video / tech","Pack extension cords, power strips, HDMI/USB-C adapters and chargers."],
+["Medical","Athletic trainers pack medical kits; managers handle loading only."],
+["Medical","Confirm ice bags, ice towels and athletic-training trunk count on inventory sheet."]
+]},
+{id:"unpacking",title:"02 · Unpacking procedure & expectations",subtitle:"Immediately on return to Oxford; report due within 12 hours",tasks:[
+["On arrival","Sweep bus, plane or hotel rooms for left items before leaving the vehicle."],
+["On arrival","Count trunks off the vehicle against the trunk list."],
+["On arrival","Move all trunks directly upstairs to their set location in Tuohy. Nothing stays outside the Players' Lounge."],
+["Laundry","Move dirty laundry to laundry room immediately; sort by game, practice and towels."],
+["Laundry","Count game uniforms by number; check tears, stains and loose numbers."],
+["Laundry","Set damaged items aside and report to Operations."],
+["Equipment return","Count basketballs, re-inflate to spec and return to racks."],
+["Equipment return","Clean whiteboards and test markers; discard dead markers."],
+["Equipment return","Return video and tech items to video staff; plug in to charge."],
+["Equipment return","Return medical trunks to athletic training room."],
+["Equipment return","Return leftover fuel and drinks to dietitian; discard perishables."],
+["Reset for next trip","Compare everything with packing inventory sheet and list missing/damaged items."],
+["Reset for next trip","Empty and wipe down trunks."],
+["Reset for next trip","Sign inventory sheet and turn it in to Director of Operations."],
+["Expectations","Do not leave until trunks are in the equipment room and laundry has started."],
+["Expectations","Report missing or damaged items to Operations in writing within 12 hours."],
+["Expectations","Program should be ready to leave again within 24 hours of return."]
+]},
+{id:"tuohy-setup",title:"03 · Tuohy practice setup",subtitle:"Arrive 60 minutes before practice; ready report 15 minutes before",tasks:[
+["T−60 · All managers","Arrive, turn lights/HVAC on, set doors and read practice plan."],
+["T−45 · Floor crew","Sweep and dry-mop floor; check dead spots and wet spots."],
+["T−45 · Floor crew","Pick up film room trash; empty trash cans in locker room, film room and team lounge."],
+["T−40 · Ball crew","Rack and inflate balls; set out and power shooting machines."],
+["T−35 · Hydration crew","Set hydration stations at both ends and put out towels."],
+["T−30 · Clock / tech","Power and test scoreboard/practice clock; queue music."],
+["T−25 · Equipment crew","Lay out reversibles by group; stage pads and drill equipment."],
+["T−15 · Assigned lead","Final walkthrough and report ready to Operations."],
+["Court & equipment","Check rims, nets and backboards; position side baskets per plan."],
+["Court & equipment","Rack about 2 basketballs per player at each end; inflate to spec."],
+["Court & equipment","Set blocking pads, cones, chairs and drill equipment per practice plan."],
+["Court & equipment","Set practice clock and scoreboard to first segment."],
+["Hydration & recovery","Set water/sports drink stations at both ends with cups and ice."],
+["Hydration & recovery","Stage fuel items from dietitian where directed."],
+["Hydration & recovery","Place towels at both ends and trash cans at each station."],
+["Staff support","Set video tower/cameras with video staff before players arrive."],
+["Staff support","Set chairs and clipboards for coaches; clean whiteboard and write plan."],
+["Staff support","Confirm athletic-training table location with AT staff."],
+["During practice","Phones away and eyes on the floor. Anticipate instead of waiting to be asked."],
+["During practice","Run clock exactly to plan; announce segment changes on cue."],
+["During practice","Rebound, pass and retrieve balls promptly; keep floor dry."],
+["During practice","Practice is closed: no visitors, photos or social posts."]
+]},
+{id:"tuohy-breakdown",title:"04 · Tuohy post-practice breakdown",subtitle:"After last player workout; facility reset and locked",tasks:[
+["Extra work","Stay until extra shooting and individual workouts are finished."],
+["Extra work","Rebound and feed for players/coaches as assigned."],
+["Equipment","Collect, count and rack balls; report missing balls."],
+["Equipment","Put away pads, cones, chairs and drill equipment."],
+["Equipment","Turn off practice clock, scoreboard and sound system."],
+["Hydration & laundry","Empty hydration stations; rinse coolers and leave open to dry."],
+["Hydration & laundry","Take towels and reversibles to laundry."],
+["Hydration & laundry","Pull trash at every station."],
+["Practice actuals","Send Practice Actuals to the designated recipient listed in the team's current instructions, every day."],
+["Practice actuals","Keep the spiral in a secure location."],
+["Facility close-out","Sweep and dry-mop floor."],
+["Facility close-out","Clean scorer's tables and areas behind each goal of trash."],
+["Facility close-out","Check locker room lights, showers and floor for left items."],
+["Facility close-out","Report damage/maintenance issues to Operations."],
+["Facility close-out","Lock equipment room and turn doors/lights off per last-out procedure."],
+["Facility close-out","Pass notes for tomorrow's setup to next day's setup crew."],
+["Expectations","Leave facility ready for coaches the next day; no confidential material on walls, boards or tables."]
+]},
+{id:"pavilion-setup",title:"05 · Pavilion practice setup",subtitle:"Same setup timeline at The Sandy and John Black Pavilion",tasks:[
+["T−60 · All managers","Arrive, turn lights/HVAC on, set doors and read practice plan."],
+["T−45 · Floor crew","Sweep and dry-mop floor; check dead spots and wet spots."],
+["T−45 · Floor crew","Pick up film room trash; empty trash cans in locker room, film room and team lounge."],
+["T−40 · Ball crew","Rack and inflate balls; set out and power shooting machines."],
+["T−35 · Hydration crew","Set hydration stations at both ends and put out towels."],
+["T−30 · Clock / tech","Power and test scoreboard/practice clock; queue music."],
+["T−25 · Equipment crew","Lay out reversibles by group; stage pads and drill equipment."],
+["T−15 · Assigned lead","Final walkthrough and report ready to Operations."],
+["Court & equipment","Check rims, nets and backboards; position side baskets per plan."],
+["Court & equipment","Rack about 2 basketballs per player at each end; inflate to spec."],
+["Court & equipment","Set blocking pads, cones, chairs and drill equipment per practice plan."],
+["Court & equipment","Set practice clock and scoreboard to first segment."],
+["Hydration & recovery","Set water/sports drink stations at both ends with cups and ice."],
+["Hydration & recovery","Stage fuel items from dietitian where directed."],
+["Hydration & recovery","Place towels at both ends and trash cans at each station."],
+["Staff support","Set video tower/cameras with video staff before players arrive."],
+["Staff support","Set chairs and clipboards for coaches; clean whiteboard and write plan."],
+["Staff support","Confirm athletic-training table location with AT staff."],
+["During practice","Phones away and eyes on the floor. Anticipate instead of waiting to be asked."],
+["During practice","Run clock exactly to plan; announce segment changes on cue."],
+["During practice","Rebound, pass and retrieve balls promptly; keep floor dry."],
+["During practice","Practice is closed: no visitors, photos or social posts."]
+]},
+{id:"pavilion-breakdown",title:"06 · Pavilion practice breakdown",subtitle:"Everything goes back to Tuohy the same day",tasks:[
+["Extra work","Stay until extra shooting and individual workouts are finished."],
+["Extra work","Rebound and feed for players/coaches as assigned."],
+["Equipment","Collect, count and rack balls; report missing balls."],
+["Equipment","Put away pads, cones, chairs and drill equipment."],
+["Equipment","Turn off practice clock, scoreboard and sound system."],
+["Hydration & laundry","Empty hydration stations; rinse coolers and leave open to dry."],
+["Hydration & laundry","Take towels and reversibles to laundry."],
+["Hydration & laundry","Pull trash at every station."],
+["Practice actuals","Send Practice Actuals to the designated recipient listed in the team's current instructions, every day."],
+["Practice actuals","Keep the spiral in a secure location."],
+["Facility close-out","Sweep and dry-mop floor."],
+["Facility close-out","Clean scorer's tables and areas behind each goal of trash."],
+["Facility close-out","Check locker room lights, showers and floor for left items."],
+["Facility close-out","Report damage/maintenance issues to Operations."],
+["Facility close-out","Lock equipment room and turn doors/lights off per last-out procedure."],
+["Facility close-out","Pass notes for tomorrow's setup to next day's setup crew."],
+["Expectations","Leave facility ready for coaches the next day; no confidential material on walls, boards or tables."]
+]},
+{id:"opponent-before",title:"07 · Day before game: opponent",subtitle:"Hosting visiting team at home games",tasks:[
+["72–48 hours out","Get visitor arrival time and practice/shootaround time at Pavilion from Operations."],
+["72–48 hours out","Call or text visiting team manager/DOO: travel party size and needs."],
+["72–48 hours out","Confirm requests for balls/game model, towels, water, sports drink, ice, laundry and video power."],
+["72–48 hours out","Share locker room location, parking/bus drop-off and your cell number."],
+["Before arrival","Empty all trash cans and replace with fresh bags."],
+["Visiting locker room","Clean and sweep; turn lights and HVAC on."],
+["Visiting locker room","Set shower and bench towels, water, sports drink, ice and cups."],
+["Visiting locker room","Set whiteboard, markers, eraser and trash cans with fresh bags."],
+["Visiting locker room","Set chairs; make TV/video power available if requested."],
+["Visitor practice","Rack 12 game-model balls at their end and count them out."],
+["Visitor practice","Set hydration and towels at their end."],
+["Visitor practice","Greet team at drop-off and escort to locker room and court."],
+["Visitor practice","Stay available outside gym for requests."],
+["After their practice","Count balls back; clear hydration and trash."],
+["After their practice","Check locker room for left-behind items and return them to staff."],
+["After their practice","Restock towels, water and ice for game day."],
+["Integrity rule","Do not watch, film or photograph opponent practice."],
+["Integrity rule","Return any paper, play or board left behind unread to their staff."]
+]},
+{id:"olemiss-before",title:"08 · Day before game: Ole Miss",subtitle:"Home and road versions",tasks:[
+["Home · Day before","Set up practice/shootaround per Pavilion Practice Setup."],
+["Home · Day before","Wash, check and count game uniforms by number."],
+["Home · Day before","Set locker room: hang uniform, warm-ups and shooting shirt at each locker."],
+["Home · Day before","Pull 3 broken-in game balls; check pressure, label and set aside."],
+["Home · Day before","Print and seal scouting reports (roster + staff + spares) per authorized instructions."],
+["Home · Day before","Stage bench supplies: towels, bottles, carriers, whiteboards, markers, play cards and stat sheets."],
+["Home · Day before","Wipe lockers; vacuum locker room, coaches' locker room and green room."],
+["Home · Day before","Account for all chairs and stage for game-day setup."],
+["Home · Day before","Confirm game-day timeline and manager assignments with Operations."],
+["Road · Travel day","Complete packing procedure and verify the night before."],
+["Road · Travel day","Load trunks at itinerary time; count trunks."],
+["Road · Travel day","At host arena, unload and set locker room; confirm host-provided items."],
+["Road · Travel day","Set up practice with host equipment; confirm ball model and count."],
+["Road · Travel day","After practice, collect and count everything; return host balls."],
+["Road · Travel day","At hotel, confirm laundry plan, uniform check and bench supplies staged for game day."],
+["Expectation","By end of day before game, game-day setup should require placing items, not finding them."],
+["Expectation","Every manager should know game-day assignment before leaving the building."]
+]},
+{id:"opponent-game",title:"09 · Game day: opponent",subtitle:"Support visiting team; arrive 3 hours before tip",tasks:[
+["Tip−3:00 · Visitor lead","Final locker room check: towels, water, sports drink, ice, whiteboard and trash."],
+["Tip−2:30 · Visitor crew","Set visiting bench: chairs, towels, water, cups, sports drink, ice towels and trash."],
+["Tip−2:00 · Visitor lead","Meet bus at drop-off and escort team to locker room."],
+["Tip−1:30 · Visitor crew","Set warm-up ball rack at their end; confirm game model and count."],
+["Postgame · Visitor lead","Clear bench, count balls, check locker room and walk team to bus."],
+["Postgame close-out","Clean visiting locker room and return left-behind items to their staff."],
+["Postgame close-out","Take towels to laundry; empty and clean coolers."],
+["Postgame close-out","Note issues or requests for next visit."],
+["Expectations","Stay professional and neutral. No reactions or conversation about the game."],
+["Expectations","Do not discuss Ole Miss personnel, plans or injuries with anyone."]
+]},
+{id:"olemiss-game",title:"10 · Game day: Ole Miss",subtitle:"Home and road versions",tasks:[
+["Home · Morning","Set everything before team arrives."],
+["Home · Morning","Ensure music works upon team's arrival."],
+["Home · Morning","Set shootaround and break down per Pavilion Practice procedures."],
+["Home · Morning","Support pregame meal as directed by Operations/dietitian."],
+["Home · Morning","Finish laundry; verify uniform count."],
+["Home · Pre-arrival","Fully set locker room; see Before Game Setup."],
+["Home · Pre-arrival","Move bench supplies to Pavilion bench area."],
+["Home · Pre-arrival","Stage game balls and warm-up balls."],
+["Home · Pre-arrival","Assign a manager to assist sports dietitian with pregame/postgame meal responsibilities and other nutrition needs."],
+["Road · Morning","Set up, run, collect and count shootaround at host arena."],
+["Road · Morning","Support pregame meal at hotel; stage bench supplies and game trunks."],
+["Road · Morning","Load game trunks on bus per itinerary; count trunks."],
+["Road · Arena arrival","Unload trunks to locker room and count."],
+["Road · Arena arrival","Set locker room and bench; confirm host water, ice and towels."],
+["Road · Arena arrival","Introduce yourself to host manager; confirm halftime and postgame needs."],
+["Expectations","Follow the Operations itinerary. Stay calm, quiet and early; do not leave managers scrambling."]
+]},
+{id:"before-setup",title:"11 · Manager responsibilities: before game setup",subtitle:"Arrive tip−3:00; final check tip−0:10",tasks:[
+["Tip−3:00 · All managers","Arrive in game-day attire and confirm assignments."],
+["Tip−2:45 · Locker crew","Set uniforms, warm-ups, shooting shirts, towels and hydration in locker room."],
+["Tip−2:30 · Locker crew","Clean locker room whiteboard; test markers; place scouting reports at seats if directed."],
+["Tip−2:15 · Bench crew","Set chair order, towels, bottles/carriers, cups, ice towels and trash."],
+["Tip−2:00 · Bench crew","Set bench kit: whiteboards, markers, play cards, substitution chart, stat sheets and stopwatch."],
+["Tip−2:00 · Floor crew","Stage floor mops at each individual basket."],
+["Tip−2:00 · Floor crew","Put Slip-Not traction mats in place."],
+["Tip−1:45 · Ball crew","Get game ball approved by officials per Operations; rack warm-up balls."],
+["Tip−1:30 · Assigned manager","Support early player work: rebound/pass for individual warm-ups."],
+["Tip−0:30 · All managers","Support team warm-up: ball racks, rebounding and keep floor clear."],
+["Tip−0:20 · Ball + bench crew","When team goes to locker room, rack balls off floor and make final bench check."],
+["Tip−0:10 · Assigned lead","Final walk of bench, locker room and halftime staging."],
+["Halftime staging","Clean and position locker room whiteboard."],
+["Halftime staging","Stage hydration and fuel per dietitian."],
+["Halftime staging","Have second-half warm-up balls ready at tunnel."],
+["Expectations","Every item has a spot; bench should look the same every game."],
+["Expectations","Ask Operations before the game, not during it."]
+]},
+{id:"during-game",title:"12 · Manager responsibilities: during game",subtitle:"Assigned roles and conduct",tasks:[
+["Bench manager","Sit at assigned spot at end of bench."],
+["Bench manager","Provide hydration and towels to players coming off the floor."],
+["South goal & north goal","Station one manager at each goal with a floor mop."],
+["South goal & north goal","Wipe wet spots immediately when play allows."],
+["South goal & north goal","During timeouts, provide water to officials."],
+["Every timeout","Set chairs/stools for huddle in the set formation."],
+["Every timeout","Bring water bottles and towels to the five players in the huddle."],
+["Every timeout","Clear everything off the floor on the horn."],
+["Halftime","Clear confidential items from bench as team leaves."],
+["Halftime","Get halftime stats from SID to coaches immediately."],
+["Halftime","Serve locker room hydration/fuel; hand off whiteboard."],
+["Halftime","Put second-half warm-up balls on floor at correct time."],
+["Injury/equipment issues","Athletic training leads every injury; managers get ice, towels or equipment on request."],
+["Injury/equipment issues","Have backup uniform ready for torn/bloody jersey per officials' rules."],
+["Conduct","Do not react to officials, opponents or fans. No phones or celebrating on court."],
+["Conduct","Stay seated unless doing a job; know where everything is without looking."]
+]},
+{id:"postgame",title:"13 · Manager responsibilities: postgame",subtitle:"Starts at final horn; complete final sweep",tasks:[
+["Immediately after horn","Collect every scouting report, play card and whiteboard from bench."],
+["Immediately after horn","Collect balls, bottles, carriers, towels and trash."],
+["Immediately after horn","Leave bench area clean."],
+["Locker room","Stage recovery fuel/shakes per dietitian."],
+["Locker room","Put shower towels out and laundry bags open."],
+["Locker room","Collect and count game uniforms by number."],
+["Home close-out","Return equipment to Tuohy/equipment room and start laundry."],
+["Home close-out","Reset locker room and clean coolers."],
+["Road close-out","Pack trunks per Packing Procedure and count trunks."],
+["Road close-out","Return host items such as balls and coolers; thank host."],
+["Road close-out","Load bus; final sweep of locker room and bench."],
+["Road close-out","Begin Unpacking Procedure on return to Oxford."],
+["Expectations","Win or lose, postgame work is done quickly, quietly and completely."],
+["Expectations","Sign-off only after final sweep."]
+]},
+{id:"assignments",title:"14 · Game-day assignments: Ole Miss",subtitle:"Page 16 photo is too blurry to read reliably",tasks:[],warning:"The final uploaded page is motion-blurred and its assignments cannot be transcribed reliably. This section is intentionally left blank. Use the original page or ask Operations for the official assignments. Do not treat the role examples elsewhere in this app as a substitute for the missing page."}
+];
+const managers = [
+ "Brennan Pays",
+ "Carter Mcilwain",
+ "Fletcher Hamilton",
+ "Jay Versochoyle",
+ "Micheal Glass",
+ "Ryan Ecker",
+ "Spencer Brooks",
+ "Trey Adams",
+ "Copeland Brown",
+ "Trey Parker",
+ "Alex Hansen"
+];
+const KEY="olemiss-manager-checklist-v1";
+let saved={checks:{},meta:{}},active="packing",showAll=false;
+try{saved=JSON.parse(localStorage.getItem(KEY))||saved}catch(e){}
+if(!saved.checks)saved.checks={};if(!saved.meta)saved.meta={};if(!saved.assignees)saved.assignees={};
+const ids=()=>sections.flatMap(s=>s.tasks.map((t,i)=>s.id+"-"+i));
+function persist(){localStorage.setItem(KEY,JSON.stringify(saved));}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function renderNav(){
+ document.getElementById("nav").innerHTML=sections.map(s=>`<button class="navbtn ${!showAll&&active===s.id?"active":""}" data-id="${s.id}">${esc(s.title)}${s.warning?' <span class="pill warn">Needs source</span>':''}</button>`).join("");
+ document.querySelectorAll(".navbtn").forEach(b=>b.onclick=()=>{active=b.dataset.id;showAll=false;render();});
+}
+function render(){
+ renderNav();
+ const query=document.getElementById("search").value.toLowerCase().trim(),filter=document.getElementById("statusFilter").value;
+ const chosen=showAll?sections:sections.filter(s=>s.id===active);
+ let total=0,done=0,html="";
+ for(const s of chosen){
+  const tasks=s.tasks.map((t,i)=>({t,i,key:s.id+"-"+i,checked:!!saved.checks[s.id+"-"+i]})).filter(x=>(!query||(x.t[0]+" "+x.t[1]).toLowerCase().includes(query))&&(filter==="all"||(filter==="done"&&x.checked)||(filter==="open"&&!x.checked)));
+  total+=tasks.length;done+=tasks.filter(x=>x.checked).length;
+  if(!tasks.length&&!s.warning)continue;
+  html+=`<section class="section"><div class="section-head"><div><h3>${esc(s.title)}</h3><small>${esc(s.subtitle)}</small></div><span class="pill">${tasks.filter(x=>x.checked).length}/${tasks.length}</span></div>`;
+  if(s.warning)html+=`<div class="task"><div><span class="pill warn">Source missing</span><p>${esc(s.warning)}</p></div></div>`;
+  if(tasks.length)html+=tasks.map(x=>`<div class="task ${x.checked?"done":""}"><input type="checkbox" id="task-${x.key}" data-key="${x.key}" ${x.checked?"checked":""}><label for="task-${x.key}">${esc(x.t[1])}<span class="task-meta">${esc(x.t[0])}</span></label><select class="task-assignee" data-assign-key="${x.key}" aria-label="Assign manager for ${esc(x.t[1])}"><option value="">Assign manager…</option>${managers.map(name=>`<option value="${esc(name)}" ${saved.assignees[x.key]===name?"selected":""}>${esc(name)}</option>`).join("")}</select></div>`).join("");
+  html+="</section>";
+ }
+ if(!html)html='<div class="panel empty">No tasks match that search/filter.</div>';
+ document.getElementById("taskList").innerHTML=html;
+ document.getElementById("totalCount").textContent=total;
+ document.getElementById("doneCount").textContent=done;
+ document.getElementById("remainingCount").textContent=total-done;
+ document.getElementById("percentCount").textContent=total?Math.round(done/total*100)+"%":"0%";
+ document.getElementById("progressBar").style.width=(total?done/total*100:0)+"%";
+ document.getElementById("viewTitle").textContent=showAll?"All checklist sections":(sections.find(s=>s.id===active)?.title||"Checklist");
+ document.getElementById("viewHelp").textContent=showAll?"Showing all readable sections from the uploaded manual.":"Use the section menu to switch between tasks.";
+ document.querySelectorAll('#taskList input[type="checkbox"]').forEach(c=>c.onchange=()=>{saved.checks[c.dataset.key]=c.checked;persist();render();});
+ document.querySelectorAll('#taskList select[data-assign-key]').forEach(sel=>sel.onchange=()=>{if(sel.value)saved.assignees[sel.dataset.assignKey]=sel.value;else delete saved.assignees[sel.dataset.assignKey];persist();});
+}
+document.getElementById("showAllBtn").onclick=()=>{showAll=true;render()};
+document.getElementById("search").oninput=render;
+document.getElementById("statusFilter").onchange=render;
+document.getElementById("printBtn").onclick=()=>window.print();
+document.getElementById("resetBtn").onclick=()=>{if(confirm("Reset completed tasks in the current section?")){const s=sections.find(x=>x.id===active);if(s)s.tasks.forEach((_,i)=>{delete saved.checks[s.id+"-"+i];delete saved.assignees[s.id+"-"+i];});persist();render();}};
+document.getElementById("exportBtn").onclick=()=>{const blob=new Blob([JSON.stringify({app:"Ole Miss Basketball Manager Checklist",version:1,exportedAt:new Date().toISOString(),progress:saved},null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="ole-miss-manager-checklist-progress.json";a.click();URL.revokeObjectURL(a.href)};
+document.getElementById("importBtn").onclick=()=>document.getElementById("importFile").click();
+document.getElementById("importFile").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());const p=data.progress||data;if(p.checks&&p.meta){saved=p;persist();render();alert("Progress imported.");}else alert("That file does not look like a checklist export.");}catch(err){alert("Could not read that JSON file.");}e.target.value=""};
+["eventName","tipTime","managerName","completedBy","verifiedBy","notes"].forEach(id=>{const el=document.getElementById(id);el.value=saved.meta[id]||"";el.addEventListener("change",()=>{saved.meta[id]=el.value;persist();});});
+
+function renderSchedule(){
+ const picker=document.getElementById("gamePicker");
+ picker.innerHTML='<option value="">Choose opponent…</option>'+games.map((g,i)=>`<option value="${i}">${esc(g[1])} · ${esc(g[2])} · ${esc(g[4])}</option>`).join("");
+ document.getElementById("scheduleRows").innerHTML=games.map((g,i)=>`<tr><td>${esc(g[1])}</td><td>${esc(g[2])}</td><td class="venue">${esc(g[3])}</td><td>${esc(g[4])}</td><td>${esc(g[5]||"Not listed")}</td><td><button class="action usegame" data-game="${i}">Use game</button></td></tr>`).join("");
+ document.querySelectorAll("[data-game]").forEach(b=>b.onclick=()=>applyGame(Number(b.dataset.game)));
+}
+function applyGame(i){
+ const g=games[i];if(!g)return;
+ document.getElementById("eventName").value=(g[3]==="Away"?"@ ":"vs ")+g[2]+(g[3]==="Neutral*"?" · neutral site":"");
+ const [year,month,day]=g[0].split("-").map(Number);
+ const timeMatch=g[4].match(/(\d+):(\d+)\s*(AM|PM)/i);
+ let hours=Number(timeMatch[1])%12;if(timeMatch[3].toUpperCase()==="PM")hours+=12;
+ const date=new Date(year,month-1,day,hours,Number(timeMatch[2]));
+ const local= new Date(date.getTime()-date.getTimezoneOffset()*60000).toISOString().slice(0,16);
+ document.getElementById("tipTime").value=local;
+ saved.meta.eventName=document.getElementById("eventName").value;
+ saved.meta.tipTime=local;persist();
+ active="olemiss-game";showAll=false;render();
+ document.getElementById("olemiss-game")?.scrollIntoView({behavior:"smooth",block:"start"});
+}
+document.getElementById("useGameBtn").onclick=()=>{const v=document.getElementById("gamePicker").value;if(v!=="")applyGame(Number(v));else alert("Choose a game first.")};
+document.getElementById("clearGameBtn").onclick=()=>{document.getElementById("gamePicker").value="";};
+renderSchedule();
+
+
+// Shared checklist + AI assistant integration. API key stays on the server.
+const ACCESS_KEY = "olemiss-manager-team-access";
+let teamCode = sessionStorage.getItem(ACCESS_KEY) || "";
+let syncing = false;
+let chatHistory = [];
+function setSyncStatus(message, bad=false){
+ const el=document.getElementById("syncStatus");
+ if(el){el.textContent=message;el.style.background=bad?"#fff0d8":"#e8f4ec";el.style.color=bad?"#86570c":"#17663b";}
+}
+async function api(path, options={}){
+ const headers={"Content-Type":"application/json","X-Team-Code":teamCode,...(options.headers||{})};
+ const response=await fetch(path,{...options,headers});
+ const data=await response.json().catch(()=>({error:"Unexpected server response"}));
+ if(!response.ok)throw new Error(data.error||"Request failed");
+ return data;
+}
+function askTeamCode(){
+ const value=prompt("Enter the team access code provided by the checklist administrator:");
+ if(value && value.trim()){teamCode=value.trim();sessionStorage.setItem(ACCESS_KEY,teamCode);return true;}
+ return false;
+}
+document.getElementById("changeAccessBtn").onclick=()=>{sessionStorage.removeItem(ACCESS_KEY);teamCode="";if(askTeamCode())loadSharedState();};
+async function loadSharedState(){
+ if(!teamCode&&!askTeamCode()){setSyncStatus("Team access code required",true);return;}
+ setSyncStatus("Connecting…");
+ try{
+  const result=await api("/api/state");
+  if(result.state){
+   saved={checks:result.state.checks||{},assignees:result.state.assignees||{},meta:result.state.meta||{}};
+   localStorage.setItem(KEY,JSON.stringify(saved));
+   ["eventName","tipTime","managerName","completedBy","verifiedBy","notes"].forEach(id=>{const el=document.getElementById(id);if(el)el.value=saved.meta[id]||"";});
+   render();
+  }
+  setSyncStatus("Shared checklist connected");
+ }catch(err){
+  setSyncStatus("Shared storage unavailable",true);
+  document.getElementById("chatStatus").textContent="Could not connect to the shared server. Check the access code or server setup. "+err.message;
+ }
+}
+const originalPersist=persist;
+persist=function(){
+ localStorage.setItem(KEY,JSON.stringify(saved));
+ if(!teamCode)return;
+ clearTimeout(window.__teamSyncTimer);
+ window.__teamSyncTimer=setTimeout(async()=>{
+  try{await api("/api/state",{method:"PUT",body:JSON.stringify({state:saved})});setSyncStatus("Changes saved for the team");}
+  catch(err){setSyncStatus("Save failed: "+err.message,true);}
+ },250);
+};
+function getAssistantSnapshot(){
+ const taskList=sections.flatMap(s=>s.tasks.map((t,i)=>{
+  const key=s.id+"-"+i;
+  return {section:s.title,sectionId:s.id,taskId:key,stage:t[0],task:t[1],complete:!!saved.checks[key],assignedTo:saved.assignees[key]||null};
+ }));
+ return {tasks:taskList,games:games.map(g=>({date:g[0],dateLabel:g[1],opponent:g[2],location:g[3],tipoff:g[4],tv:g[5]||"Not listed"})),event:saved.meta.eventName||null,tipoff:saved.meta.tipTime||null,sourceCaveat:"The final page's assignments were unreadable in the provided photo. Do not invent those assignments. Operations itinerary overrides the schedule."};
+}
+function addChatMessage(text, who){
+ const log=document.getElementById("chatLog"),div=document.createElement("div");
+ div.className="chat-msg "+who;div.textContent=text;log.appendChild(div);log.scrollTop=log.scrollHeight;
+}
+document.getElementById("chatForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const input=document.getElementById("chatQuestion"),question=input.value.trim();
+ if(!question)return;
+ if(!teamCode&&!askTeamCode())return;
+ addChatMessage(question,"user");input.value="";
+ const send=document.getElementById("chatSend");send.disabled=true;send.textContent="Thinking…";
+ document.getElementById("chatStatus").textContent="Checking the latest shared checklist…";
+ try{
+  const result=await api("/api/chat",{method:"POST",body:JSON.stringify({question,history:chatHistory.slice(-8),snapshot:getAssistantSnapshot()})});
+  addChatMessage(result.answer,"bot");
+  chatHistory.push({role:"user",content:question},{role:"assistant",content:result.answer});
+  document.getElementById("chatStatus").textContent="Answers are based on the current recorded checklist and the schedule shown here. Unrecorded work cannot be verified.";
+ }catch(err){
+  addChatMessage("I couldn't answer because the shared assistant isn't available: "+err.message,"bot");
+  document.getElementById("chatStatus").textContent="Check the server connection and team access code.";
+ }
+ finally{send.disabled=false;send.textContent="Ask assistant";input.focus();}
+});
+
+render();
+loadSharedState();
+</script>
+</body>
+</html>
